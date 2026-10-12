@@ -1,11 +1,12 @@
 #!/bin/bash
-echo ":)"
+echo ";)"
 args=("$@") 
 sum=0
 i=0
-while (( i <= ${#args[@]} )); do
+while (( i <= $# ))
+do
   (( sum += args[i] ))
   (( i++ ))
 done
-result=$(echo "scale=2; $sum / ${#args[@]}" | bc)
+result=$(echo "scale=2; $sum / $#" | bc)
 echo "$result"
