@@ -1,0 +1,33 @@
+#!/bin/bash
+
+if(($# < 1))
+then
+	echo "Аргументы не найдены"
+	exit 0
+fi
+
+i=0
+args=("$@") 
+while((i<$#))
+do
+	if((args[i] < 0))
+	then
+	echo "Скрипт работает только с неотрицательными значениями."
+	exit 0
+	fi
+	((i=i+1))
+done
+ 
+sum=0
+i=0
+
+while (( i < $# ))
+do
+	(( sum += args[i] ))
+	(( i++ ))
+done
+
+result=$(echo "scale=2; $sum / $#" | bc)
+echo "Среднее значение из переданных аргументов:"
+echo "$result"
+
