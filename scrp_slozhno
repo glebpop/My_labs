@@ -1,0 +1,124 @@
+#!/bin/bash
+
+func(){
+	array=($(cat "$file"))
+
+	echo "Выберите действие, введя значение команды:"
+	echo "1. Подсчитать количество строк в текстовом файле."
+	echo "2. Вычислить факториал."
+	echo "3. Вычислить таблицу умножения."
+	echo "4. Проверить, является ли число простым."
+	echo "5. Подсчитать четные и нечетные числа." 
+	echo "6. Показать количество аргументов командной строки."
+	echo "0. Выход."
+	
+	echo -n "Выберите действие: "
+	read n
+	case "$n" in
+	1)
+		line_count=$(wc -l < "$file")
+		echo "Количество строк в $file: $line_count"
+		func
+		;;
+	2)
+		
+		i=0
+		res=1
+		while [ "$i" -lt "${#array[@]}" ]
+		do
+			((res=res*${array[i]}))
+			((i=i+1))
+		done
+		echo "Значение факториала: $res"
+		func
+		;;
+	3)
+		i=0
+		num=1
+		res=1
+		while [ "$i" -lt "${#array[@]}" ]
+		do
+			num=1
+			while [ "$num" -le 10 ]
+			do
+				((res=array[i]*num))
+				echo "${array[i]} * $num = $res"
+				((num=num+1))
+			done
+			echo ""
+			((i=i+1))
+		done
+		func
+		;;
+	4)
+		d=2
+		i=0
+		while [ "$i" -lt "${#array[@]}" ]
+		do
+			d=2
+			while [ "$d" -lt "${array[i]}" ]
+			do
+				if (( "${array[i]}" % d == 0 ))
+				then
+					echo "${array[i]} не является простым числом."
+					break
+				fi
+			((d=d+1))
+			done
+			if [ "$d" -eq "${array[i]}" ]
+                                then 
+                                        echo "${array[i]} является простым числом."
+                                fi
+
+			((i=i+1))
+		done
+		func
+		;;
+	5)
+		ch=0
+		nch=0
+		i=0
+		while [ "$i" -lt "${#array[@]}" ]
+		do
+			if ((array[i] % 2 == 0))
+			then
+			((ch=ch+1))
+			else
+			((nch=nch+1))
+			fi
+		((i=i+1))
+		done
+		echo "Количество четных чисел: $ch"
+		echo "Количество нечетных чисел: $nch"
+		func
+		;;
+ 	6)
+		echo "Количество переданных аргументов: ${#array[@]}"
+		func
+		;;
+	0)
+		exit 0
+		;;
+	*)
+		echo "Неверный выбор команды, введите от 0 до 6."
+		func
+		;;
+	esac
+}
+
+echo "Введите название файла, с которым хотите выполнить действие(Файл должен находится в папке, где лежит файл скрипта):"
+echo -n "Файл: "
+
+prov(){
+read file
+if [ ! -f "$file" ]
+then  echo "Такого файла не существует, повторите попытку."
+      echo -n "Файл: "
+      prov
+else func
+fi
+}
+
+prov
+ 
+		
